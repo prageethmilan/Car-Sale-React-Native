@@ -8,8 +8,6 @@ const image = require('../assets/login_background.jpg')
 
 export default function Login() {
 
-    const [show, setShow] = React.useState(false);
-
     return (
         <NativeBaseProvider>
             <Box style={styles.container}>
