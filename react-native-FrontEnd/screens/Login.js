@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, Dimensions, ImageBackground, Image } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, Dimensions, ImageBackground, Image, Alert } from 'react-native'
+import React, { useState } from 'react'
 import { NativeBaseProvider, Box, Input, FormControl, Stack, Button } from 'native-base'
 
 const windowWidth = Dimensions.get('window').width;
@@ -7,6 +7,33 @@ const windowHeight = Dimensions.get('window').height;
 const image = require('../assets/login_background.jpg')
 
 export default function Login() {
+
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    loginUser = () => {
+        fetch(`http://192.168.1.100:8000/users/login/${username}/${password}`, {
+            method: "GET",
+            headers:{
+                'content-type':'application/json'
+            }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            if(json.length === 0){
+                Alert.alert("Username or password incorrect.Try again!")
+            } else {
+                clearTextFields()
+                Alert.alert("Login Successful.");
+            }
+        })
+        .catch((err)=>console.log(err));
+    }
+
+    clearTextFields = () => {
+        setUsername("");
+        setPassword("");
+    }
 
     return (
         <NativeBaseProvider>
@@ -16,10 +43,10 @@ export default function Login() {
                     <FormControl isRequired>
                         <Stack mx="4">
                             <FormControl.Label>Username</FormControl.Label>
-                            <Input type="text" style={styles.input} require />
+                            <Input type="text" style={styles.input} value={username} onChangeText={(e) => { setUsername(e) }} />
                             <FormControl.Label>Password</FormControl.Label>
-                            <Input type="password" style={styles.input} require />
-                            <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn}>
+                            <Input type="password" style={styles.input} value={password} onChangeText={(e) => { setPassword(e) }} />
+                            <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn} onPress={() => { loginUser() }} >
                                 <Text style={styles.login_btn_label}>Login</Text>
                             </Button>
                         </Stack>
@@ -68,15 +95,15 @@ const styles = StyleSheet.create({
         bottom: '4%',
         left: '15%'
     },
-    btn_Signup:{
-        width:'30%',
-        position:'absolute',
-        bottom:'2.5%',
-        left:'55%'
+    btn_Signup: {
+        width: '30%',
+        position: 'absolute',
+        bottom: '2.5%',
+        left: '55%'
     },
-    btn_Signup_label:{
-        color:'pink',
-        fontWeight:'bold',
-        fontSize:17
+    btn_Signup_label: {
+        color: 'pink',
+        fontWeight: 'bold',
+        fontSize: 17
     }
 })

@@ -8,8 +8,8 @@ import LoadCars from './screens/LoadCars'
 export default function App() {
   return (
     <View>
-      {/* <Login/> */}
-      <Signup/>
+      <Login/>
+      {/* <Signup/> */}
       {/* <SaveCarScreen/> */}
       {/* <LoadCars/> */}
     </View>

@@ -44,9 +44,9 @@ router.post('/', (req, res) => {
 
 });
 
-router.get('/login', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
+router.get('/login/:username/:password', (req, res) => {
+    const username = req.params.username
+    const password = req.params.password;
 
     var query = "SELECT * FROM users WHERE username=? AND password=?";
 
