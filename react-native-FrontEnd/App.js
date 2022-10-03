@@ -4,14 +4,15 @@ import Login from './screens/Login'
 import Signup from './screens/Signup'
 import SaveCarScreen from './screens/SaveCarScreen'
 import LoadCars from './screens/LoadCars'
+import { NavigationContainer } from '@react-navigation/native'
 
 export default function App() {
   return (
-    <View>
-      <Login/>
-      {/* <Signup/> */}
-      {/* <SaveCarScreen/> */}
-      {/* <LoadCars/> */}
-    </View>
+    <NavigationContainer>
+      <Login />
+    // <Signup />
+    // <SaveCarScreen />
+    // <LoadCars />
+    </NavigationContainer>
   )
 }

@@ -3,8 +3,8 @@ import { Box, HStack, NativeBaseProvider, Text, TextArea, FormControl, VStack, I
 import { StyleSheet, Dimensions, Image } from 'react-native'
 import { IconButton, MD3Colors, Button } from 'react-native-paper'
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+// const windowWidth = Dimensions.get('window').width;
+// const windowHeight = Dimensions.get('window').height;
 
 export default function SaveCarScreen() {
 
@@ -12,7 +12,7 @@ export default function SaveCarScreen() {
 
     return (
         <NativeBaseProvider>
-            <Box style={styles.container}>
+            {/* <Box style={styles.container}> */}
                 <Text fontSize={'4xl'} style={styles.saveCarHeading}>Add Car Details</Text>
                 <HStack space={2} justifyContent={'center'}>
                     <IconButton
@@ -47,16 +47,12 @@ export default function SaveCarScreen() {
                         Clear
                     </Button>
                 </HStack>
-            </Box>
+            {/* </Box> */}
         </NativeBaseProvider>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: windowWidth,
-        height: windowHeight
-    },
     saveCarHeading: {
         color: 'blue',
         textDecorationLine: 'underline',

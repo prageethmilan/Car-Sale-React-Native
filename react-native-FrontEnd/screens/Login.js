@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, Dimensions, ImageBackground, Image, Alert } fro
 import React, { useState } from 'react'
 import { NativeBaseProvider, Box, Input, FormControl, Stack, Button } from 'native-base'
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+// const windowWidth = Dimensions.get('window').width;
+// const windowHeight = Dimensions.get('window').height;
 const image = require('../assets/login_background.jpg')
 
 export default function Login() {
@@ -37,7 +37,7 @@ export default function Login() {
 
     return (
         <NativeBaseProvider>
-            <Box style={styles.container}>
+            {/* <Box style={styles.container}> */}
                 <ImageBackground source={image} resizeMode='cover' style={styles.img}>
                     <Image source={require('../assets/logo.png')} style={styles.logo} />
                     <FormControl isRequired>
@@ -56,16 +56,12 @@ export default function Login() {
                         <Text style={styles.btn_Signup_label}>Sign Up</Text>
                     </Button>
                 </ImageBackground>
-            </Box>
+            {/* </Box> */}
         </NativeBaseProvider>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: windowWidth,
-        height: windowHeight
-    },
     img: {
         width: '100%',
         height: '100%'
