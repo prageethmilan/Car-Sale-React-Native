@@ -9,9 +9,9 @@ export default function App() {
   return (
     <View>
       {/* <Login/> */}
-      {/* <Signup/> */}
+      <Signup/>
       {/* <SaveCarScreen/> */}
-      <LoadCars/>
+      {/* <LoadCars/> */}
     </View>
   )
 }

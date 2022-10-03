@@ -1,12 +1,55 @@
-import { StyleSheet, Text, View, Dimensions, ImageBackground, Image } from 'react-native'
-import React from 'react'
-import { NativeBaseProvider, Box, Input, FormControl, Stack, Button, Heading,WarningOutlineIcon } from 'native-base'
+import { StyleSheet, Text, View, Dimensions, ImageBackground, Image, Alert } from 'react-native'
+import React, { useState } from 'react'
+import { NativeBaseProvider, Box, Input, FormControl, Stack, Button, Heading, WarningOutlineIcon } from 'native-base'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const image = require('../assets/login_background.jpg')
 
 export default function Signup() {
+
+  const [fullName, setFullName] = useState("");
+  const [contact, setContact] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  saveUser = async () => {
+
+    if (fullName != "" && contact != "" && username != "" && password != "") {
+      fetch('http://192.168.1.100:8000/users', {
+        method: 'POST',
+        body: JSON.stringify({
+          fullName: fullName,
+          contact: contact,
+          username: username,
+          password: password
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.status === "500") {
+            Alert.alert(json.message);
+          } else {
+            Alert.alert(json.message);
+            clearTextFields();
+          }
+        })
+        .catch((err) => Alert.alert(err));
+    } else {
+      Alert.alert("Please fill all the fields and try again.")
+    }
+  }
+
+  const clearTextFields = () => {
+    setFullName("");
+    setContact("");
+    setUsername("");
+    setPassword("");
+  }
+
   return (
     <NativeBaseProvider>
       <Box style={styles.container}>
@@ -15,15 +58,15 @@ export default function Signup() {
           <FormControl isRequired>
             <Stack mx="4">
               <FormControl.Label>Full Name</FormControl.Label>
-              <Input type="text" style={styles.input} />
+              <Input type="text" style={styles.input} value={fullName} onChangeText={(e) => { setFullName(e) }} />
               <FormControl.Label>Mobile Number</FormControl.Label>
-              <Input type="text" style={styles.input} require />
+              <Input type="text" style={styles.input} value={contact} onChangeText={(e) => { setContact(e) }} />
               <FormControl.Label>Username</FormControl.Label>
-              <Input type="text" style={styles.input} require />
+              <Input type="text" style={styles.input} value={username} onChangeText={(e) => { setUsername(e) }} />
               <FormControl.Label>Password</FormControl.Label>
-              <Input type="text" style={styles.input} require />
+              <Input type="password" style={styles.input} value={password} onChangeText={(e) => { setPassword(e) }} />
 
-              <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn}>
+              <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn} onPress={() => { saveUser() }} >
                 <Text style={styles.login_btn_label}>Sign Up</Text>
               </Button>
             </Stack>

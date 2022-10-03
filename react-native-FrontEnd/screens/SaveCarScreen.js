@@ -1,13 +1,15 @@
-import React from 'react'
-import { Box, HStack, NativeBaseProvider, Text, TextArea } from 'native-base'
+import React, { useState } from 'react'
+import { Box, HStack, NativeBaseProvider, Text, TextArea, FormControl, VStack, Input } from 'native-base'
 import { StyleSheet, Dimensions, Image } from 'react-native'
 import { IconButton, MD3Colors, Button } from 'react-native-paper'
-
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function SaveCarScreen() {
+
+    const [date, setDate] = useState("");
+
     return (
         <NativeBaseProvider>
             <Box style={styles.container}>
@@ -26,8 +28,17 @@ export default function SaveCarScreen() {
                     </Button>
                 </HStack>
                 <Image style={styles.uploadImageContainer} />
-                <Text fontSize={'2xl'} style={styles.addDescription_title}>Add Description</Text>
-                <TextArea alignSelf={'center'} borderColor={'black'} placeholder="Description" w="80%" h="48" maxW="300" />
+                {/* <Text fontSize={'2xl'} style={styles.addDescription_title}>Add Description</Text>
+                <TextArea alignSelf={'center'} borderColor={'black'} placeholder="Description" w="80%" h="48" maxW="300" /> */}
+
+                <VStack space={4} alignItems="center" mt="5%">
+                    <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'}/>
+                    <Input type="text" style={styles.input} require w="80%" placeholder='Location' borderColor={'black'}/>
+                    <TextArea borderColor={'black'} placeholder="Description" w="80%" h="20" maxW="300" fontSize={15} />
+                </VStack>
+
+
+
                 <HStack space={2} justifyContent={'center'} marginTop={'4%'}>
                     <Button icon="car" mode="contained" buttonColor='green'>
                         Save
@@ -85,5 +96,8 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         marginBottom: '2%',
         textDecorationLine: 'underline'
+    },
+    input: {
+        fontSize: 20
     }
 })
