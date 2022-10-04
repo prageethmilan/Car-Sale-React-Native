@@ -6,7 +6,7 @@ import { NativeBaseProvider, Box, Input, FormControl, Stack, Button, Heading, Wa
 // const windowHeight = Dimensions.get('window').height;
 const image = require('../assets/login_background.jpg')
 
-export default function Signup() {
+export default function Signup({ navigation }) {
 
   const [fullName, setFullName] = useState("");
   const [contact, setContact] = useState("");
@@ -53,25 +53,40 @@ export default function Signup() {
   return (
     <NativeBaseProvider>
       {/* <Box style={styles.container}> */}
-        <ImageBackground source={image} resizeMode='cover' style={styles.img}>
-          <Heading style={styles.heading} color={'#fff200'} size={'3xl'}>Sign Up</Heading>
-          <FormControl isRequired>
-            <Stack mx="4">
-              <FormControl.Label>Full Name</FormControl.Label>
-              <Input type="text" style={styles.input} value={fullName} onChangeText={(e) => { setFullName(e) }} />
-              <FormControl.Label>Mobile Number</FormControl.Label>
-              <Input type="text" style={styles.input} value={contact} onChangeText={(e) => { setContact(e) }} />
-              <FormControl.Label>Username</FormControl.Label>
-              <Input type="text" style={styles.input} value={username} onChangeText={(e) => { setUsername(e) }} />
-              <FormControl.Label>Password</FormControl.Label>
-              <Input type="password" style={styles.input} value={password} onChangeText={(e) => { setPassword(e) }} />
+      <ImageBackground source={image} resizeMode='cover' style={styles.img}>
+        <Heading style={styles.heading} color={'#fff200'} size={'3xl'}>Sign Up</Heading>
+        <FormControl isRequired>
+          <Stack mx="4">
+            <FormControl.Label>Full Name</FormControl.Label>
+            <Input type="text" style={styles.input} value={fullName} onChangeText={(e) => { setFullName(e) }} />
+            <FormControl.Label>Mobile Number</FormControl.Label>
+            <Input type="text" style={styles.input} value={contact} onChangeText={(e) => { setContact(e) }} />
+            <FormControl.Label>Username</FormControl.Label>
+            <Input type="text" style={styles.input} value={username} onChangeText={(e) => { setUsername(e) }} />
+            <FormControl.Label>Password</FormControl.Label>
+            <Input type="password" style={styles.input} value={password} onChangeText={(e) => { setPassword(e) }} />
 
-              <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn} onPress={() => { saveUser() }} >
-                <Text style={styles.login_btn_label}>Sign Up</Text>
-              </Button>
-            </Stack>
-          </FormControl>
-        </ImageBackground>
+            <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn} onPress={() => { saveUser() }} >
+              <Text style={styles.login_btn_label}>Sign Up</Text>
+            </Button>
+          </Stack>
+        </FormControl>
+        <Text style={styles.signup_label}>Already have an account?</Text>
+        <Button size="md"
+          variant="link"
+          colorScheme={'secondary'}
+          style={styles.btn_Signup}
+          onPress={() => {
+            try {
+              navigation.navigate("Login")
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        >
+          <Text style={styles.btn_Signup_label}>Login</Text>
+        </Button>
+      </ImageBackground>
       {/* </Box> */}
     </NativeBaseProvider>
   )

@@ -6,7 +6,7 @@ import { NativeBaseProvider, Box, Input, FormControl, Stack, Button } from 'nati
 // const windowHeight = Dimensions.get('window').height;
 const image = require('../assets/login_background.jpg')
 
-export default function Login() {
+export default function Login({navigation}) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -20,11 +20,16 @@ export default function Login() {
         })
         .then((response) => response.json())
         .then((json) => {
+            console.log(json);
             if(json.length === 0){
                 Alert.alert("Username or password incorrect.Try again!")
             } else {
                 clearTextFields()
                 Alert.alert("Login Successful.");
+                navigation.navigate("Dash",{
+                    username:json[0].username,
+                    fullname:json[0].fullName
+                });
             }
         })
         .catch((err)=>console.log(err));
@@ -52,7 +57,7 @@ export default function Login() {
                         </Stack>
                     </FormControl>
                     <Text style={styles.signup_label}>Don't have an account?</Text>
-                    <Button size="md" variant="link" colorScheme={'secondary'} style={styles.btn_Signup}>
+                    <Button size="md" variant="link" colorScheme={'secondary'} style={styles.btn_Signup} onPress={()=>{navigation.navigate("signup")}}>
                         <Text style={styles.btn_Signup_label}>Sign Up</Text>
                     </Button>
                 </ImageBackground>
