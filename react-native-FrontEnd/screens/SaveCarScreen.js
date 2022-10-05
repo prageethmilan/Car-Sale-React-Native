@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Box, HStack, NativeBaseProvider, Text, TextArea, FormControl, VStack, Input } from 'native-base'
 import { StyleSheet, Dimensions, Image, PermissionsAndroid } from 'react-native'
 import { IconButton, MD3Colors, Button } from 'react-native-paper'
-// import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 // const windowWidth = Dimensions.get('window').width;
@@ -40,16 +40,16 @@ export default function SaveCarScreen() {
 
     const takePhotoFromCamera = async () => {
         const options = {
-            saveToPhotos:true,
-            mediaType:'photo',
-            includeBase64:true,
-            presentationStyle:'popover',
-            quality:1
+            saveToPhotos: true,
+            mediaType: 'photo',
+            includeBase64: true,
+            presentationStyle: 'popover',
+            quality: 1
         }
-        launchCamera(options,(res)=>{
-            if(res.didCancel){
+        launchCamera(options, (res) => {
+            if (res.didCancel) {
                 console.log('User Cancled');
-            } else if (res.errorCode){
+            } else if (res.errorCode) {
                 console.log(res.errorMessage);
             } else {
                 const data = res.assets[0].uri;
@@ -57,7 +57,15 @@ export default function SaveCarScreen() {
                 setPhoto(data);
             }
         });
-        // setPhoto(result.assets[0].uri);
+    }
+
+    const takePhotoFromGallery = async () => {
+        const options = {
+            saveToPhotos: true,
+            mediaType: 'photo'
+        }
+        const result = await launchImageLibrary(options);
+        setPhoto(result.assets[0].uri);
     }
 
     return (
@@ -75,7 +83,7 @@ export default function SaveCarScreen() {
                         takePhotoFromCamera();
                     }}
                 />
-                <Button icon="upload" mode="contained-tonal" style={styles.uploadImage_btn}>
+                <Button icon="upload" mode="contained-tonal" style={styles.uploadImage_btn} onPress={() => { takePhotoFromGallery(); console.log("Upload button Pressed"); }}>
                     <Text style={styles.upload_btn_label}>UPLOAD IMAGE</Text>
                 </Button>
             </HStack>

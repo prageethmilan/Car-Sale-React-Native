@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Dimensions, ImageBackground, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { NativeBaseProvider, Box, Input, FormControl, Stack, Button, Heading, WarningOutlineIcon } from 'native-base'
+import { NativeBaseProvider, Box, Input, FormControl, Stack, Button, Heading, WarningOutlineIcon, HStack } from 'native-base'
 
 // const windowWidth = Dimensions.get('window').width;
 // const windowHeight = Dimensions.get('window').height;
@@ -66,26 +66,28 @@ export default function Signup({ navigation }) {
             <FormControl.Label>Password</FormControl.Label>
             <Input type="password" style={styles.input} value={password} onChangeText={(e) => { setPassword(e) }} />
 
-            <Button size="md" variant="subtle" colorScheme="purple" style={styles.login_btn} onPress={() => { saveUser() }} >
-              <Text style={styles.login_btn_label}>Sign Up</Text>
+            <Button size="md" variant="subtle" colorScheme="purple" style={styles.signup_btn} onPress={() => { saveUser() }} >
+              <Text style={styles.signup_btn_label}>Sign Up</Text>
             </Button>
           </Stack>
         </FormControl>
-        <Text style={styles.signup_label}>Already have an account?</Text>
-        <Button size="md"
-          variant="link"
-          colorScheme={'secondary'}
-          style={styles.btn_Signup}
-          onPress={() => {
-            try {
-              navigation.navigate("Login")
-            } catch (err) {
-              console.log(err);
-            }
-          }}
-        >
-          <Text style={styles.btn_Signup_label}>Login</Text>
-        </Button>
+        <HStack space={2} alignSelf={'center'} mt="35%">
+          <Text style={styles.login_label}>Already have an account?</Text>
+          <Button size="md"
+            variant="link"
+            colorScheme={'secondary'}
+            style={styles.btn_login}
+            onPress={() => {
+              try {
+                navigation.navigate("Login")
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            <Text style={styles.btn_login_label}>Login</Text>
+          </Button>
+        </HStack>
       </ImageBackground>
       {/* </Box> */}
     </NativeBaseProvider>
@@ -107,28 +109,29 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20
   },
-  login_btn: {
+  signup_btn: {
     marginTop: '4%'
   },
-  login_btn_label: {
+  signup_btn_label: {
     color: 'purple',
     fontSize: 15,
     fontWeight: 'bold'
   },
-  signup_label: {
-    position: 'absolute',
+  login_label: {
+    // position: 'absolute',
+    marginTop:'2.75%',
     color: 'white',
-    fontSize: 17,
-    bottom: '4%',
-    left: '15%'
+    fontSize: 17
+    // bottom: '4%',
+    // left: '15%'
   },
-  btn_Signup: {
-    width: '30%',
-    position: 'absolute',
-    bottom: '2.5%',
-    left: '55%'
+  btn_login: {
+    // width: '30%',
+    // position: 'absolute',
+    // bottom: '2.5%',
+    // left: '55%'
   },
-  btn_Signup_label: {
+  btn_login_label: {
     color: 'pink',
     fontWeight: 'bold',
     fontSize: 17
