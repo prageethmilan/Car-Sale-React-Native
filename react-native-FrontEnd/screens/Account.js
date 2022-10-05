@@ -5,10 +5,6 @@ import { TextInput,Button } from 'react-native-paper'
 
 export default function Account({route,navigation}) {
 
-    useEffect(()=>{
-        console.log(route);
-    })
-
     return (
         <NativeBaseProvider>
             <Avatar bg="indigo.50" mt={'25%'} alignSelf="center" size="2xl" source={require('../assets/account.png')}></Avatar>

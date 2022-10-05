@@ -11,9 +11,6 @@ const accountRoute = (props) => <Account {...props} />;
 
 
 export default function BottomNavigationScreen(props) {
-    React.useEffect(() => {
-        console.log(props);
-    })
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'load', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline' },
