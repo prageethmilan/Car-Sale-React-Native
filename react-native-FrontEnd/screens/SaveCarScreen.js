@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, HStack, NativeBaseProvider, Text, TextArea, FormControl, VStack, Input } from 'native-base'
-import { StyleSheet, Dimensions, Image, PermissionsAndroid } from 'react-native'
+import { StyleSheet, Dimensions, Image, PermissionsAndroid, Platform } from 'react-native'
 import { IconButton, MD3Colors, Button } from 'react-native-paper'
 import ImagePicker from 'react-native-image-crop-picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -8,9 +8,13 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 // const windowWidth = Dimensions.get('window').width;
 // const windowHeight = Dimensions.get('window').height;
 
-export default function SaveCarScreen() {
+export default function SaveCarScreen({ route, navigation }) {
 
-    const [photo, setPhoto] = useState(null);
+    const [photo, setPhoto] = useState("");
+    const [username, setUsername] = useState(route.props.username);
+    const [date, setDate] = useState("");
+    const [location, setLocation] = useState("");
+    const [description, setDescription] = useState("");
 
     // const openCamera = async () => {
     //     let options = {
@@ -52,7 +56,7 @@ export default function SaveCarScreen() {
             } else if (res.errorCode) {
                 console.log(res.errorMessage);
             } else {
-                const data = res.assets[0].uri;
+                const data = res.assets[0];
                 console.log(data);
                 setPhoto(data);
             }
@@ -65,8 +69,56 @@ export default function SaveCarScreen() {
             mediaType: 'photo'
         }
         const result = await launchImageLibrary(options);
-        setPhoto(result.assets[0].uri);
+        console.log(result.assets[0].uri);
+        setPhoto(result.assets[0]);
     }
+
+
+    const createFormData = (photo, body) => {
+        const data = new FormData();
+
+        data.append('photo',{
+            name: photo.fileName,
+            type: photo.type,
+            uri:
+                Platform.OS === 'android' ? photo.uri : photo.uri.replace('file://', ''),
+        });
+
+        Object.keys(body).forEach((key) => {
+            data.append(key, body[key]);
+        });
+
+        console.log(data);
+
+        return data;
+    };
+
+    uploadImage = async () => {
+        fetch('http://192.168.1.100:8000/cars/save', {
+            method: 'POST',
+            body: createFormData(photo, {
+                username: username,
+                date: date,
+                location: location,
+                description: description
+            }),
+            headers:{
+                'Accept': 'application/json',
+                'Content-type': 'multipart/form-data',
+            },
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                // console.log('upload succes', response);
+                alert('Upload success!');
+            })
+            .catch((error) => {
+                console.log('upload error', error);
+                alert('Upload failed!');
+            });
+    }
+
+
 
     return (
         <NativeBaseProvider>
@@ -87,20 +139,18 @@ export default function SaveCarScreen() {
                     <Text style={styles.upload_btn_label}>UPLOAD IMAGE</Text>
                 </Button>
             </HStack>
-            <Image style={styles.uploadImageContainer} source={{ uri: photo }} />
+            <Image style={styles.uploadImageContainer} source={{ uri: photo.uri }} />
             {/* <Text fontSize={'2xl'} style={styles.addDescription_title}>Add Description</Text>
                 <TextArea alignSelf={'center'} borderColor={'black'} placeholder="Description" w="80%" h="48" maxW="300" /> */}
 
             <VStack space={4} alignItems="center" mt="5%">
-                <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'} />
-                <Input type="text" style={styles.input} require w="80%" placeholder='Location' borderColor={'black'} />
-                <TextArea borderColor={'black'} placeholder="Description" w="80%" h="20" maxW="300" fontSize={15} />
+                <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'} value={date} onChangeText={(e) => { setDate(e) }} />
+                <Input type="text" style={styles.input} require w="80%" placeholder='Location' borderColor={'black'} value={location} onChangeText={(e) => { setLocation(e) }} />
+                <TextArea borderColor={'black'} placeholder="Description" w="80%" h="20" maxW="300" fontSize={15} value={description} onChangeText={(e) => { setDescription(e) }} />
             </VStack>
 
-
-
             <HStack space={2} justifyContent={'center'} marginTop={'4%'}>
-                <Button icon="car" mode="contained" buttonColor='green'>
+                <Button icon="car" mode="contained" buttonColor='green'onPress={()=>{uploadImage()}} >
                     Save
                 </Button>
                 <Button icon="delete-sweep" mode="contained" buttonColor='gray'>
