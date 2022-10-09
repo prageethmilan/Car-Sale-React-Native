@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Box, HStack, NativeBaseProvider, Text, TextArea, FormControl, VStack, Input } from 'native-base'
-import { StyleSheet, Dimensions, Image, PermissionsAndroid, Platform } from 'react-native'
+import { StyleSheet, Dimensions, Image, PermissionsAndroid, Platform, Alert, TouchableOpacity, Animated } from 'react-native'
 import { IconButton, MD3Colors, Button } from 'react-native-paper'
 import ImagePicker from 'react-native-image-crop-picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import DatePicker from 'react-native-date-picker'
 
 // const windowWidth = Dimensions.get('window').width;
 // const windowHeight = Dimensions.get('window').height;
@@ -15,6 +16,7 @@ export default function SaveCarScreen({ route, navigation }) {
     const [date, setDate] = useState("");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
+    const [open, setOpen] = useState(false)
 
     // const openCamera = async () => {
     //     let options = {
@@ -77,7 +79,7 @@ export default function SaveCarScreen({ route, navigation }) {
     const createFormData = (photo, body) => {
         const data = new FormData();
 
-        data.append('photo',{
+        data.append('photo', {
             name: photo.fileName,
             type: photo.type,
             uri:
@@ -102,20 +104,30 @@ export default function SaveCarScreen({ route, navigation }) {
                 location: location,
                 description: description
             }),
-            headers:{
+            headers: {
                 'Accept': 'application/json',
                 'Content-type': 'multipart/form-data',
             },
         })
             .then((response) => response.json())
             .then((json) => {
-                // console.log('upload succes', response);
-                alert('Upload success!');
+                if (json.status === "200") {
+                    Alert.alert(json.message);
+                    clearTextFields();
+                } else {
+                    Alert.alert(json.message);
+                }
             })
             .catch((error) => {
-                console.log('upload error', error);
-                alert('Upload failed!');
+                Alert.alert('Error occured.Try again shortly');
             });
+    }
+
+    const clearTextFields = () => {
+        setPhoto("");
+        setDate("");
+        setLocation("");
+        setDescription("");
     }
 
 
@@ -144,19 +156,37 @@ export default function SaveCarScreen({ route, navigation }) {
                 <TextArea alignSelf={'center'} borderColor={'black'} placeholder="Description" w="80%" h="48" maxW="300" /> */}
 
             <VStack space={4} alignItems="center" mt="5%">
-                <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'} value={date} onChangeText={(e) => { setDate(e) }} />
+                {/* <TouchableOpacity onPress={() => { setOpen(true) }}> */}
+                    <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'} value={date} onChangeText={(e) => { setDate(e) }} />
+                {/* </TouchableOpacity> */}
                 <Input type="text" style={styles.input} require w="80%" placeholder='Location' borderColor={'black'} value={location} onChangeText={(e) => { setLocation(e) }} />
                 <TextArea borderColor={'black'} placeholder="Description" w="80%" h="20" maxW="300" fontSize={15} value={description} onChangeText={(e) => { setDescription(e) }} />
             </VStack>
 
             <HStack space={2} justifyContent={'center'} marginTop={'4%'}>
-                <Button icon="car" mode="contained" buttonColor='green'onPress={()=>{uploadImage()}} >
+                <Button icon="car" mode="contained" buttonColor='green' onPress={() => { uploadImage() }} >
                     Save
                 </Button>
-                <Button icon="delete-sweep" mode="contained" buttonColor='gray'>
+                <Button icon="delete-sweep" mode="contained" buttonColor='gray' onPress={clearTextFields} >
                     Clear
                 </Button>
             </HStack>
+
+            {/* <DatePicker
+                modal
+                open={open}
+                date={date}
+                mode={'date'}
+                onConfirm={(date) => {
+                    setOpen(false)
+                    setDate(date)
+                    console.log(date);
+                }}
+                onCancel={() => {
+                    setOpen(false)
+                }}
+            /> */}
+
             {/* </Box> */}
         </NativeBaseProvider>
     )
