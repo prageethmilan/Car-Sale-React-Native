@@ -59,7 +59,7 @@ router.get('/loadCars/:username', (req, res) => {
     const username = req.params.username;
     var query = "SELECT * FROM cars WHERE username=? ";
 
-    connection.query(query,[username],(err, row) => {
+    connection.query(query, [username], (err, row) => {
         if (err) {
             console.log(err);
         } else {
@@ -68,21 +68,44 @@ router.get('/loadCars/:username', (req, res) => {
     })
 })
 
-router.delete('/deleteCar/:carId',(req,res) => {
+router.delete('/deleteCar/:carId', (req, res) => {
     const carId = req.params.carId;
 
     var query = "DELETE FROM cars WHERE carId=? ";
 
-    connection.query(query,[carId],(err)=>{
-        if(err){
+    connection.query(query, [carId], (err) => {
+        if (err) {
             res.send({
-                "status":"500",
-                "message":"Error occured.Try again!"
+                "status": "500",
+                "message": "Error occured.Try again!"
             });
         } else {
             res.send({
-                "status":"200",
-                "message":"Car deleted successfully"
+                "status": "200",
+                "message": "Car deleted successfully"
+            });
+        }
+    })
+})
+
+router.put('/update', (req, res) => {
+    const carId = req.body.carId;
+    const date = req.body.date;
+    const location = req.body.location;
+    const description = req.body.description;
+
+    var query = "UPDATE cars SET date=?,location=?,description=? WHERE carId=?";
+
+    connection.query(query, [date, location, description, carId], (err) => {
+        if (err) {
+            res.send({
+                "status": "500",
+                "message": "Error occured.Try again!"
+            });
+        } else {
+            res.send({
+                "status": "200",
+                "message": "Car updated successfully"
             });
         }
     })

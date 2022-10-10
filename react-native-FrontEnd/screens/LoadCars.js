@@ -23,6 +23,23 @@ export default function LoadCars({ route, navigation }) {
             });
     });
 
+    componentDidMount = () => {
+        const focusHandler = route.navigation.addListener('focus', () => {
+            fetch(`http://192.168.1.100:8000/cars/loadCars/${username}`, {
+                method: "GET",
+                headers: {
+                    'content-type': 'application/json'
+                }
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    setDATA(json)
+                });
+        });
+        return focusHandler;
+    };
+
+
     const deleteCar = (car) => {
         fetch(`http://192.168.1.100:8000/cars/deleteCar/${car.carId}`, {
             method: "DELETE"
@@ -55,17 +72,17 @@ export default function LoadCars({ route, navigation }) {
                         <HStack space={"70%"} justifyContent={'center'}>
                             <IconButton
                                 icon="pencil"
-                                iconColor={MD3Colors.neutral10}
+                                iconColor={MD3Colors.primary50}
                                 size={20}
                                 mode={'contained'}
 
                                 onPress={() => {
-                                    route.navigation.navigate("update",{item});
+                                    route.navigation.navigate("update", { item });
                                 }}
                             />
                             <IconButton
                                 icon="delete"
-                                iconColor={MD3Colors.neutral10}
+                                iconColor={MD3Colors.error50}
                                 size={20}
                                 mode={'contained'}
 

@@ -95,32 +95,36 @@ export default function SaveCarScreen({ route, navigation }) {
         return data;
     };
 
-    uploadImage = async () => {
-        fetch('http://192.168.1.100:8000/cars/save', {
-            method: 'POST',
-            body: createFormData(photo, {
-                username: username,
-                date: date,
-                location: location,
-                description: description
-            }),
-            headers: {
-                'Accept': 'application/json',
-                'Content-type': 'multipart/form-data',
-            },
-        })
-            .then((response) => response.json())
-            .then((json) => {
-                if (json.status === "200") {
-                    Alert.alert(json.message);
-                    clearTextFields();
-                } else {
-                    Alert.alert(json.message);
-                }
+    saveCar = async () => {
+        if (photo != "" && date != "" && location != "" && description != "") {
+            fetch('http://192.168.1.100:8000/cars/save', {
+                method: 'POST',
+                body: createFormData(photo, {
+                    username: username,
+                    date: date,
+                    location: location,
+                    description: description
+                }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'multipart/form-data',
+                },
             })
-            .catch((error) => {
-                Alert.alert('Error occured.Try again shortly');
-            });
+                .then((response) => response.json())
+                .then((json) => {
+                    if (json.status === "200") {
+                        Alert.alert(json.message);
+                        clearTextFields();
+                    } else {
+                        Alert.alert(json.message);
+                    }
+                })
+                .catch((error) => {
+                    Alert.alert('Error occured.Try again shortly');
+                });
+        } else {
+            Alert.alert("Please fill all the fields.");
+        }
     }
 
     const clearTextFields = () => {
@@ -157,14 +161,14 @@ export default function SaveCarScreen({ route, navigation }) {
 
             <VStack space={4} alignItems="center" mt="5%">
                 {/* <TouchableOpacity onPress={() => { setOpen(true) }}> */}
-                    <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'} value={date} onChangeText={(e) => { setDate(e) }} />
+                <Input type="text" style={styles.input} w="80%" placeholder='Date' borderColor={'black'} value={date} onChangeText={(e) => { setDate(e) }} />
                 {/* </TouchableOpacity> */}
                 <Input type="text" style={styles.input} require w="80%" placeholder='Location' borderColor={'black'} value={location} onChangeText={(e) => { setLocation(e) }} />
                 <TextArea borderColor={'black'} placeholder="Description" w="80%" h="20" maxW="300" fontSize={15} value={description} onChangeText={(e) => { setDescription(e) }} />
             </VStack>
 
             <HStack space={2} justifyContent={'center'} marginTop={'4%'}>
-                <Button icon="car" mode="contained" buttonColor='green' onPress={() => { uploadImage() }} >
+                <Button icon="car" mode="contained" buttonColor='green' onPress={() => { saveCar() }} >
                     Save
                 </Button>
                 <Button icon="delete-sweep" mode="contained" buttonColor='gray' onPress={clearTextFields} >
